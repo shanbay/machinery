@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -297,12 +298,12 @@ func getUintValue(theType string, value interface{}) (uint64, error) {
 			return 0, typeConversionError(value, typesMap[theType].String())
 		}
 
-		intVal, err := n.Int64()
+		uintVal, err := strconv.ParseUint(string(n), 10, 64)
 		if err != nil {
 			return 0, err
 		}
 
-		return uint64(intVal), nil
+		return uintVal, nil
 	}
 
 	var n uint64
