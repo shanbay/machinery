@@ -289,9 +289,9 @@ func getIntValue(theType string, value interface{}) (int64, error) {
 }
 
 func getUintValue(theType string, value interface{}) (uint64, error) {
-	// We use https://golang.org/pkg/encoding/json/#Decoder.UseNumber when unmarshaling signatures.
-	// This is because JSON only supports 64-bit floating point numbers and we could lose precision
-	// when converting from float64 to unsigned integer
+	// Losing precision only happens in receiving a JSON number from a language like js,
+	// and receiving a large uint number from golang or python could cause json.Number.Int64 be turned into a panic.
+	// So we use strconv.ParseUint to correctly parse a uint value.
 	if strings.HasPrefix(fmt.Sprintf("%T", value), "json.Number") {
 		n, ok := value.(json.Number)
 		if !ok {
